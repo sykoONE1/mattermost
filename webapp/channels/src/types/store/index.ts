@@ -1,11 +1,13 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
+import type {RehydrateAction} from 'redux-persist';
+
 import type {GlobalState as BaseGlobalState} from '@mattermost/types/store';
 
 import type {MMReduxAction} from 'mattermost-redux/action_types';
 import type {AnyActionFrom, AnyActionWithType} from 'mattermost-redux/action_types/types';
-import type {WebsocketEvents} from 'mattermost-redux/constants';
+import type {General, WebsocketEvents} from 'mattermost-redux/constants';
 import type * as MMReduxTypes from 'mattermost-redux/types/actions';
 
 import type {ActionTypes, SearchTypes, StorageTypes, Threads} from 'utils/constants';
@@ -28,7 +30,7 @@ export type GlobalState = BaseGlobalState & {
     views: ViewsState;
 };
 
-type MMAction = (
+export type MMAction = (
 
     // Actions used by mattermost-redux reducers
     MMReduxAction |
@@ -36,9 +38,10 @@ type MMAction = (
     // Actions used by web app reducers
     AnyActionFrom<typeof ActionTypes & typeof Threads & typeof SearchTypes & typeof StorageTypes> |
 
-    // Actions used by the reducer for state.entities.typing in mattermost-redux which are incorrectly reusing WS
-    // message types
-    AnyActionWithType<typeof WebsocketEvents.TYPING | typeof WebsocketEvents.STOP_TYPING>
+    // Actions used by reducers defined outside normal locations
+    AnyActionWithType<typeof WebsocketEvents.TYPING | typeof WebsocketEvents.STOP_TYPING | typeof General.STORE_REHYDRATION_COMPLETE> |
+
+    RehydrateAction
 );
 
 /**
