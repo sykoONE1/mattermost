@@ -71,7 +71,7 @@ export {
  * It should only be used for testing.
  */
 export interface InitAction {
-    type: '';
+    type: undefined;
 }
 
 /**
